@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { getCurrentAuction, startAuction, stopAuction, updateAuction } from "@/service/auctionService"
 import { getLotListByAuctionId, updateLot } from "@/service/lotService"
 import { Auction } from "@/type/auction.d"
 import { Lot } from "@/type/lot.d"
 import { formatInTimeZone } from 'date-fns-tz'
-import { format, set } from "date-fns"
+import { format } from "date-fns"
 
 const timezone = "Asia/Bangkok" // Timezone +7
 
@@ -39,7 +39,6 @@ const NextEvent = () => {
 
          updateAuction(updatedAuction)
             .then(() => {
-
                setReload(true)
                setModifiedFields((prev) => {
                   const updatedFields = { ...prev };
@@ -60,6 +59,10 @@ const NextEvent = () => {
    }
 
    const handleStartAuction = (auctionId: number) => {
+      if (auction?.ended && (auction.ended < new Date(new Date().getTime() + 30 * 60000) || auction.started > new Date())) {
+         alert('Auction is not in the right time to start')
+         return
+      }
       startAuction(auctionId)
          .then(() => {
             setReload(true)

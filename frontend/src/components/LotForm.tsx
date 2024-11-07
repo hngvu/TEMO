@@ -69,6 +69,21 @@ export default function LotForm({ koiId, koiStatus, onLotCreated }: { koiId: num
          note: formData.notes || "",
       };
 
+      if (lot.started < new Date(new Date().getTime() + 60000)) {
+         alert('The start date must be in the future.');
+         return;
+      }
+
+      if (lot.ended < new Date(lot.started.getTime() + 30 * 60000)) {
+         alert('The end date must be at least 30 minutes after the start date.');
+         return;
+      }
+
+      if (lot.ended < new Date(new Date().getTime() + 30 * 60000)) {
+         alert('The end date must be at least 30 minutes after the start date.');
+         return;
+      }
+
       console.log("Creating lot:", lot);
       await createLot(lot);
       await updateKoi({ id: koiId, note: lot.note, status: "AUCTIONING" });

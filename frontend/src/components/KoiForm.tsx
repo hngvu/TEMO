@@ -97,6 +97,18 @@ export function KoiForm() {
                <FormField
                   control={form.control}
                   name="yob"
+                  rules={{
+                     required: 'Year of Birth is required',
+                     validate: (value) => {
+                        const yobNumber = Number(value);
+                        return (
+                           !isNaN(yobNumber) &&
+                           yobNumber >= 2020 &&
+                           yobNumber <= 2024 ||
+                           'Year of Birth must be a number between 2020 and 2024'
+                        );
+                     }
+                  }}
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Year of Birth (YOB)</FormLabel>
@@ -111,6 +123,18 @@ export function KoiForm() {
                <FormField
                   control={form.control}
                   name="length"
+                  rules={{
+                     required: 'Length is required',
+                     validate: (value) => {
+                        const length = Number(value);
+                        return (
+                           !isNaN(length) &&
+                           length >= 15 &&
+                           length <= 25 ||
+                           'Length must be a number between 15 and 25'
+                        );
+                     }
+                  }}
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Length (cm)</FormLabel>
@@ -125,6 +149,7 @@ export function KoiForm() {
                <FormField
                   control={form.control}
                   name="gender"
+                  rules={{ required: 'Gender is required' }}
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Gender</FormLabel>
@@ -147,6 +172,7 @@ export function KoiForm() {
                <FormField
                   control={form.control}
                   name="variety"
+                  rules={{ required: 'Variety is required' }}
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Variety</FormLabel>
@@ -174,6 +200,7 @@ export function KoiForm() {
                <FormField
                   control={form.control}
                   name="image"
+                  rules={{ required: 'Image is required' }}
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Upload Image</FormLabel>
@@ -196,6 +223,7 @@ export function KoiForm() {
                <FormField
                   control={form.control}
                   name="message"
+                  rules={{ required: 'Message is required' }}
                   render={({ field }) => (
                      <FormItem>
                         <FormLabel>Message</FormLabel>
