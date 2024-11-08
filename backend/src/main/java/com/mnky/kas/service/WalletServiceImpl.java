@@ -93,6 +93,7 @@ public class WalletServiceImpl implements WalletService {
 
     }
 
+    //Chi tra tien cho nguoi thua
     @Override
     @Transactional
     public List<TransactionResponse> refundAllBalanceTransactionByLotId(short lotId) {
@@ -122,9 +123,11 @@ public class WalletServiceImpl implements WalletService {
             transaction.setDescription(formattedDate + "_" + "RET_LOT_" + lotId + "_" + b.getAmount());
 
 //            System.out.println("trans: " + transaction.toString());
-            transactionRepository.save(transaction);
-            ls.add(transactionMapper.toTransactionResponse(transaction));
-            addBalance(b.getBidder(), b.getAmount());
+            if(!b.isHighest()){
+                addBalance(b.getBidder(), b.getAmount());
+                transactionRepository.save(transaction);
+                ls.add(transactionMapper.toTransactionResponse(transaction));
+            }
         }
         return ls;
     }
