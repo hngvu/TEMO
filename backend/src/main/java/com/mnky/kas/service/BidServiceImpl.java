@@ -256,7 +256,6 @@ public class BidServiceImpl implements BidService {
 
 
         double amount = lot.getBuyNowPrice();
-
         //Buy Lot = Tien buy now - tien da dat cuoc => hoan tien
         //place bid with highest price
         walletService.placeBidUsingWallet(token, amount, lotId);

@@ -53,6 +53,15 @@ const BillingList = () => {
    const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
       // console.log('Selected transactions to pay:', Array.from(selectedTransactions));
+      console.log("dadasdsa: ", Array.from(selectedTransactions).length);
+      if(Array.from(selectedTransactions).length == 0) {
+         toast({
+            variant: "destructive",
+            title: "Nothing to purcharse",
+         });
+         return
+      }
+      
       if (isUseWallet) {         
          if(totalTransMoney > balance) {
             toast({
@@ -60,7 +69,7 @@ const BillingList = () => {
                title: "Your Wallet doesn't have enough money",
             });
          }else{
-            const payment = await payByWallet(Array.from(selectedTransactions))
+            await payByWallet(Array.from(selectedTransactions))
             toast({
                variant: "success",
                title: "Payment success",
