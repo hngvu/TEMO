@@ -69,10 +69,10 @@ export default function LotForm({ koiId, koiStatus, onLotCreated }: { koiId: num
          note: formData.notes || "",
       };
 
-      if (lot.started < new Date(new Date().getTime() + 60000)) {
-         alert('The start date must be in the future.');
-         return;
-      }
+      // if (lot.started < new Date(new Date().getTime() + 10000)) {
+      //    alert('The start date must be in the future.');
+      //    return;
+      // }
 
       if (lot.ended < new Date(lot.started.getTime() + 30 * 60000)) {
          alert('The end date must be at least 30 minutes after the start date.');
@@ -82,6 +82,41 @@ export default function LotForm({ koiId, koiStatus, onLotCreated }: { koiId: num
       if (lot.ended < new Date(new Date().getTime() + 30 * 60000)) {
          alert('The end date must be at least 30 minutes after the start date.');
          return;
+      }
+
+      if (lot.buyerPremium > 1 || lot.buyerPremium < 0) {
+         alert('The buyer premium must be between 0 and 1')
+         return;
+      }
+
+      if (lot.sellerCommission > 1 || lot.sellerCommission < 0) {
+         alert('The seller commission must be between 0 and 1')
+         return;
+      }
+
+      if (lot.startingPrice < 10000) {
+         alert('The starting price must be greater than 10,000 VND')
+         return
+      }
+
+      if (lot.methodId == 2 && lot.estimatedPrice < lot.startingPrice * 2) {
+         alert('The estimated price must be at least double the starting price')
+         return
+      }
+
+      if ((lot.methodId == 3 || lot.methodId == 4) && lot.priceInterval < 1000) {
+         alert('The price interval must be greater than 1,000 VND')
+         return
+      }
+
+      if (lot.methodId == 3 && lot.buyNowPrice < lot.startingPrice * 2) {
+         alert('The buy now price must be at least double the starting price')
+         return
+      }
+
+      if (lot.methodId == 4 && lot.reservePrice < lot.startingPrice * 2) {
+         alert('The reserve price must be at least double the starting price')
+         return
       }
 
       console.log("Creating lot:", lot);

@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface InvoiceMapper {
     @Mapping(target = "recipientId", source = "recipient.id")
+    @Mapping(target = "created", source = "created")
     InvoiceResponse toInvoiceResponse(Invoice invoice);
 }

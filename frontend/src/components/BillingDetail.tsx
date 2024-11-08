@@ -24,7 +24,14 @@ const BillingDetail = () => {
    return (
       <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-md text-gray-900 border border-gray-200">
          <h2 className="text-center text-3xl font-bold mb-4">Invoice #{invoice.id}</h2>
-         <p className="text-center text-sm text-gray-500 mb-8">Date: {formatInTimeZone(new Date(invoice.created), "Asia/Bangkok", "dd.MM.yyyy HH:mm a")}</p>
+         <p className="text-center text-sm text-gray-500 mb-8">Date:
+            {formatInTimeZone(
+               new Date(invoice.created),
+               "Asia/Bangkok",
+               "dd.MM.yyyy HH:mm:ss"
+            )
+            }
+         </p>
 
          {/* Invoice Item Details */}
          <div className="mb-6">
