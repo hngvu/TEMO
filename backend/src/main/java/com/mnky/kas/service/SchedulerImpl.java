@@ -12,6 +12,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -182,20 +183,22 @@ public class SchedulerImpl {
         invoice.setBuyerPremium(lot.getBuyerPremium());
         invoice.setShippingCost(100000);
         invoice.setHammerPrice(bidRepository.findBidIsHighestByLotId(lotId).getAmount());
-        invoice.setBuyerTotal(((invoice.getHammerPrice() * (1 + lot.getBuyerPremium())) + invoice.getShippingCost()) * (1 + invoice.getTax()));
+        invoice.setBuyerTotal(((invoice.getHammerPrice() * ( lot.getBuyerPremium())) + invoice.getShippingCost()) * (1 + invoice.getTax()));
         invoice.setDescription("Invoice for lot ID: " + lotId);
         invoice.setStatus(Invoice.InvoiceStatus.PENDING);
+        invoice.setCreated(Timestamp.valueOf(LocalDateTime.now()));
         Invoice inv  = invoiceRepository.save(invoice);
         System.out.println("Invoice ID: " + inv.getId());
-
+    //tien cuoc + premium + ship ) * tax
         generateTransaction(inv.getId());
     }
 
     private void generateTransaction(short invoiceId) {
         Invoice invoice = invoiceRepository.findById(invoiceId);
 
+
         Transaction transaction = new Transaction();
-        transaction.setAmount(invoice.getBuyerTotal());
+        transaction.setAmount(invoice.getBuyerTotal() - invoice.getHammerPrice());
         transaction.setDescription("Lot ID: " + invoice.getLot().getId());
         transaction.setClosed(new Timestamp(System.currentTimeMillis() + 5 * 60 * 1000));
         transaction.setStatus(Transaction.TransactionStatus.PENDING);
