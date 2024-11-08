@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatMoney } from "@/util/helper";
 import { Modal } from 'antd';
 import { getUserPlacedBidsByLotId } from "@/service/walletService";
-import { set } from "date-fns";
+
 
 
 
@@ -44,9 +44,9 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
           setIsPlacedBid(highestBidData?.bidderId === user?.id);
         } else {
           const userBid = await getBidByLotIdAndBidderId(lotDetail.lotId, user.id);
-          setHighestBid(userBid);
+          //setHighestBid(userBid);
           // Check if the current user has already placed a bid
-          setIsPlacedBid(userBid?.bidderId === user?.id);
+          setIsPlacedBid(userBid?.bidderId == user?.id);
 
         }
       } catch (error) {
@@ -63,7 +63,7 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
 
   // listen highest bid
   useEffect(() => {
-    if (lotDetail.status == 'LIVE') {
+    if (lotDetail.status == 'LIVE' && lotDetail.methodId == 3) {
       const socket = new SockJS("http://localhost:8080/ws");
       const client = Stomp.over(socket);
 
@@ -73,7 +73,7 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
         client.subscribe(`/topic/lot/${lotDetail.lotId}/bid`, (message) => {
           const data = JSON.parse(message.body);
           setHighestBid(data);
-          if (data.bidderId == user.id) {
+          if (data.bidderId == user?.id) {
             setIsPlacedBid(true);
           } else {
             setIsPlacedBid(false);
@@ -85,6 +85,8 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
         client.disconnect();
       };
     }
+
+
   }, [])
 
 
@@ -227,7 +229,7 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
           });
           return;
       }
-
+      setIsPlacedBid(true);
       // Show success message and update balance/bid info
       toast({
         variant: "success",
@@ -243,7 +245,7 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
       getUserPlacedBidsByLotId(parseInt(lotDetail.lotId)).then(data => {
         setPlacedBid(data.balance);
       });
-      setIsPlacedBid(true);
+
     } catch (error) {
       console.error("Error placing bid:", error);
       toast({
@@ -263,7 +265,7 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
       return false;
     }
 
-    if (highestBid && bidAmount < highestBid.amount + lotDetail.priceInterval) {
+    if (lotDetail.methodId == 3 && highestBid && bidAmount < highestBid.amount + lotDetail.priceInterval) {
       setError("Bid amount should be greater than the current highest bid");
       return false;
     }
@@ -358,6 +360,8 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
           Buy now: {formatMoney(lotDetail.buyNowPrice)}
         </Button>
       )}
+
+
       {isPlacedBid ? (
         <>
         </>

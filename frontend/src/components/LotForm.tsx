@@ -114,8 +114,8 @@ export default function LotForm({ koiId, koiStatus, onLotCreated }: { koiId: num
          return
       }
 
-      if (lot.methodId == 4 && lot.reservePrice < lot.startingPrice * 2) {
-         alert('The reserve price must be at least double the starting price')
+      if (lot.methodId == 4 && lot.reservePrice > (lot.startingPrice * 0.9)) {
+         alert('The reserve price must be less than 75% of the starting price')
          return
       }
 

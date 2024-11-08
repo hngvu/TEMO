@@ -175,15 +175,14 @@ public class SchedulerImpl {
         }
 
         Invoice invoice = new Invoice();
-        invoice.setId((short) (invoiceRepository.findAll().size() + 1));
-
+        
         invoice.setLot(lot);
         invoice.setRecipient(bidRepository.findBidIsHighestByLotId(lotId).getBidder());
         invoice.setTax(0.1);
         invoice.setBuyerPremium(lot.getBuyerPremium());
         invoice.setShippingCost(100000);
         invoice.setHammerPrice(bidRepository.findBidIsHighestByLotId(lotId).getAmount());
-        invoice.setBuyerTotal(((invoice.getHammerPrice() * ( lot.getBuyerPremium())) + invoice.getShippingCost()) * (1 + invoice.getTax()));
+        invoice.setBuyerTotal(((invoice.getHammerPrice() * ( 1 +  lot.getBuyerPremium())) + invoice.getShippingCost()) * (1 + invoice.getTax()));
         invoice.setDescription("Invoice for lot ID: " + lotId);
         invoice.setStatus(Invoice.InvoiceStatus.PENDING);
         invoice.setCreated(Timestamp.valueOf(LocalDateTime.now()));
