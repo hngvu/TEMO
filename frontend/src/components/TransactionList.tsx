@@ -13,7 +13,7 @@ const TransactionList = () => {
       const fetchTransactions = async () => {
          const data = await getTransaction();
          const paidTransactions = data.filter((transaction: Transaction) => transaction.status === 'SUCCESS');
-         setTransactions(paidTransactions);
+         setTransactions(paidTransactions.reverse());
       };
       fetchTransactions();
    }, []);
@@ -21,7 +21,6 @@ const TransactionList = () => {
    return (
       <div className="max-w-4xl mx-auto p-4">
          <h2 className="text-3xl font-bold text-center mb-8">Transaction History</h2>
-
          <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
             <div className="grid grid-cols-4 bg-gray-200 text-gray-800 font-semibold p-4 text-sm">
                <div className="text-center">No.</div>
@@ -36,10 +35,10 @@ const TransactionList = () => {
                      key={transaction.id}
                      className="grid grid-cols-4 p-4 text-center text-gray-700 text-sm hover:bg-gray-50"
                   >
-                     <div>{index + 1}</div>
+                     <div>{transactions.length - index}</div>
                      <div className="text-balance pr-5">{transaction.description}</div>
-                     <div className="font-medium text-green-600">
-                        {transaction.invoiceId ? ('-') : ('+')}
+                     <div className={`font-medium ${transaction.invoiceId || transaction.description.includes('REM') || transaction.description.includes('BID') ? 'text-red-500' : 'text-green-600'}`}>
+                        {transaction.invoiceId || transaction.description.includes('REM') || transaction.description.includes('BID') ? ('-') : ('+')}
                         {formatMoney(transaction.amount)}</div>
                      <div>{formatInTimeZone(new Date(transaction.updated), timezone, "dd.MM.yyyy HH:mm a")}</div>
                   </div>

@@ -259,7 +259,6 @@ public class WalletServiceImpl implements WalletService {
             // deduct the wallet
             deductBalance(member, newDeductAmount);
             transactionRepository.save(transaction);
-
             return WalletResponse.builder()
                     .balance(amount)
                     .build();

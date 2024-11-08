@@ -66,7 +66,7 @@ const Wallet = () => {
 
     const addBalance = async () => {
         addWalletBalance(transactionBalancedRef.current).then((data) => {
-            setTransactions([...transactions, data]);
+            setTransactions([data, ...transactions]);
             toast({
                 variant: "success",
                 title: "Transaction created successfully!",
@@ -116,7 +116,7 @@ const Wallet = () => {
                         {transactions.map((transaction, index) => (
                             <div key={transaction.id} className="grid grid-cols-12 text-gray-800 p-3">
                                 <div className="col-span-1">
-                                    {index + 1}
+                                    {transactions.length - index}
                                 </div>
                                 <div className="col-span-3">{transaction.description}</div>
                                 <div className={`col-span-2 ${transaction.description.includes('REM') || transaction.description.includes('BID')  ? 'text-red-500' : 'text-green-500'}`}>{formatMoney(transaction.amount)} VND</div>

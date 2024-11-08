@@ -369,7 +369,7 @@ const PlaceBid = ({ lotDetail }: { lotDetail: LotDetailProps }) => {
         <>
           {
             lotDetail.methodId === 1 && (<Button
-              onClick={placeBid}
+                onClick={processBidding}
               className="px-4 py-2 rounded-full bg-purple-300 text-lg">
               Place bid: {formatMoney(lotDetail.startingPrice)}
             </Button>)
